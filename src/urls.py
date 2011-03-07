@@ -15,7 +15,7 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
-    (r'^nutrobber/$', 'nutrobber.views.index'),
+    (r'^$', 'nutrobber.views.index'),
 
     # Uncomment this for admin:
     #(r'^admin/', include('django.contrib.admin.urls')),
