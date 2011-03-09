@@ -6,13 +6,12 @@
 <p>Hello, {{username}}.</p>
 <p id="canvas_msg"></p> 
 <p>Click <a href="{{signout}}">here</a> to sign out.</p>
-
 <script type="text/javascript">
 if (Modernizr.canvas) {
-    document.getElementById("canvas_msg").innerHTML = "Your browser supports canvas.";
+	$('p#canvas_msg').html('Your browser supports canvas.');
 }
 else {
-    document.getElementById("canvas_msg").innerHTML = "Your browser does not support canvas.";
+	$('p#canvas_msg').html('Your browser does not support canvas.');
 }
 </script>
 {% endblock %}
