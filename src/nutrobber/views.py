@@ -1,3 +1,5 @@
+import json
+
 from google.appengine.api import users
 
 from django.http import HttpResponse
@@ -15,3 +17,8 @@ def index(request):
         return HttpResponse(t.render(c))
     else:
         return HttpResponseRedirect(users.create_login_url(request.build_absolute_uri()))
+
+def checkin(request):
+    lat = request.GET['lat']
+    lng = request.GET['lng']
+    return HttpResponse(json.dumps({'lat':lat, 'lng':lng}))

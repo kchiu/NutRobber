@@ -2,36 +2,15 @@
 
 {% block title %}NutRobber{% endblock %}
 
-{% block content %}
+{% block body %}
+<body style="height:100%" onload="initialize()">
 <div>Hello, {{username}}.</div>
 <div id="map_canvas" style="width:50%; height:80%"></div>
 <div>Click <a href="{{signout}}">here</a> to sign out.</div>
 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
-<script type="text/javascript">
-function show_map(pos) {
-    var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-    var map_opts = {
-        zoom: 11,
-        center: latlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), map_opts);
-    
-    var marker_opts = {
-        map: map,
-        position: latlng
-    };
-    var marker = new google.maps.Marker(marker_opts);
-}
+<script type="text/javascript" src="js/nutrobber.js">
 
-function initialize() {
-    if (Modernizr.geolocation) {
-        navigator.geolocation.getCurrentPosition(show_map);
-    }
-    else {
-        $('div#map_canvas').html('Your browser does not support geolocation.');
-    }    
-}
 </script>
+</body>
 {% endblock %}
