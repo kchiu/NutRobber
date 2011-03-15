@@ -12,12 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns('',
     (r'^$', 'nutrobber.views.index'),
-    (r'^checkin', 'nutrobber.views.checkin')
-    
-    # Uncomment this for admin:
-    #(r'^admin/', include('django.contrib.admin.urls')),
+    (r'^checkin$', 'nutrobber.views.checkin')
 )
