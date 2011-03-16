@@ -16,5 +16,6 @@ from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns('',
     (r'^$', 'nutrobber.views.index'),
-    (r'^checkin$', 'nutrobber.views.checkin')
+    (r'^checkin$', 'nutrobber.views.checkin'),
+    (r'^generate_victims$', 'nutrobber.views.generate_victims')
 )

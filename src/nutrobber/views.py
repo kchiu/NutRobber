@@ -8,9 +8,11 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseServerError
 from django.template import Context
 from django.template import loader
+from random import randint
 
 from nutrobber.models import CurrentPlayers
 from nutrobber.util import decorator
+
 
 @decorator.catch_except(HttpResponseServerError())
 def index(request):
@@ -23,6 +25,7 @@ def index(request):
         return HttpResponse(t.render(c))
     else:
         return HttpResponseRedirect(users.create_login_url(request.build_absolute_uri()))
+
 
 @decorator.catch_except(HttpResponseServerError())
 def checkin(request):
@@ -40,3 +43,16 @@ def checkin(request):
         CurrentPlayers(player=user, lat=curlat, lng=curlng).put()
 
     return HttpResponse(json.dumps({'lat':curlat, 'lng':curlng}))
+
+
+@decorator.catch_except(HttpResponseServerError())
+def generate_victims(request):
+    victim_list = []
+    step_limit = float(request.GET['step_limit'])
+    count = int(request.GET['count'])
+    
+    for i in range(count):
+        victim_list += [{'lat_step': randint(-step_limit, step_limit),
+                         'lng_step': randint(-step_limit, step_limit)}]
+    
+    return HttpResponse(json.dumps(victim_list))

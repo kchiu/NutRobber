@@ -3,9 +3,14 @@
 {% block title %}NutRobber{% endblock %}
 
 {% block body %}
-<body style="height:100%" onload="initialize()">
-<div>Hello, {{username}}.</div>
-<div id="map_canvas" style="width:50%; height:80%"></div>
+<body>
+<div>Hello, <span id="username">{{username}},</span>, user arrow key to move yourself!</div>
+<div>
+	Starting Position: <span id="startPos"></span>
+	<br>
+	Current Position: <span id="curPos"></span> 
+</div>
+<div id="map_canvas" style="width:750px; height:750px"></div>
 <div>Click <a href="{{signout}}">here</a> to sign out.</div>
 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
