@@ -11,6 +11,7 @@ function show_map(pos) {
     
     var map_opts = {
         zoom: 15,
+        maxZoom: 18,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -37,6 +38,7 @@ function show_map(pos) {
     });
     
     generate_victims();
+    $(document).keydown(key_handler);
 }
 
 $(function() {
@@ -46,8 +48,6 @@ $(function() {
     else {
         $('div#map_canvas').html('Your browser does not support geolocation.');
     }
-    
-    $(document).keydown(key_handler);
 });
 
 
@@ -75,7 +75,7 @@ function key_handler(e) {
     
     var new_latlng = new google.maps.LatLng(lat, lng);
 	g_marker_player.setPosition(new_latlng);
-	g_map.setCenter(new_latlng);
+	keep_markers_in_map();
 	$("#curPos").text(new_latlng.toString());
 }
 
@@ -103,12 +103,18 @@ function generate_victims() {
 			    };
 			    g_marker_victims.push(new google.maps.Marker(marker_opts));	
         	}
-        	var bounds = new google.maps.LatLngBounds();
-        	bounds.extend(g_marker_player.getPosition());
-        	for (var i = 0; i < g_marker_victims.length; i++) {
-        		bounds.extend(g_marker_victims[i].getPosition());
-        	}
-        	g_map.fitBounds(bounds);
+        	
+        	keep_markers_in_map();
         }
     });
 }
+
+function keep_markers_in_map() {
+	var bounds = new google.maps.LatLngBounds();
+	bounds.extend(g_marker_player.getPosition());
+	for (var i = 0; i < g_marker_victims.length; i++) {
+		bounds.extend(g_marker_victims[i].getPosition());
+	}
+	g_map.fitBounds(bounds);
+}
+
