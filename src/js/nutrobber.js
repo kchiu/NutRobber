@@ -89,6 +89,7 @@ function generate_victims() {
         },
         success: function(json) {
         	var p_latlng = g_marker_player.getPosition();
+        	
         	for (var i = 0; i < json.length; i++) {
         		var v_latlng = new google.maps.LatLng(
         			p_latlng.lat() + json[i].lat_step * g_step_width,
@@ -102,6 +103,12 @@ function generate_victims() {
 			    };
 			    g_marker_victims.push(new google.maps.Marker(marker_opts));	
         	}
+        	var bounds = new google.maps.LatLngBounds();
+        	bounds.extend(g_marker_player.getPosition());
+        	for (var i = 0; i < g_marker_victims.length; i++) {
+        		bounds.extend(g_marker_victims[i].getPosition());
+        	}
+        	g_map.fitBounds(bounds);
         }
     });
 }
