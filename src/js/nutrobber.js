@@ -82,14 +82,13 @@ function key_handler(e) {
 function generate_victims() {
     $.ajax({
         url: 'generate_victims',
-        data: {step_limit: 100, count: 1},
+        data: {step_limit: 100, count: 2},
         dataType: 'json',
         error: function(xhr) {
             alert('[error] No more victims, stop robbing!');
         },
         success: function(json) {
         	var p_latlng = g_marker_player.getPosition();
-        	
         	for (var i = 0; i < json.length; i++) {
         		var v_latlng = new google.maps.LatLng(
         			p_latlng.lat() + json[i].lat_step * g_step_width,
@@ -101,9 +100,10 @@ function generate_victims() {
 			        icon: '/img/nuts.png',
 			        zIndex: 0
 			    };
-			    g_marker_victims.push(new google.maps.Marker(marker_opts));	
+			    var marker = new google.maps.Marker(marker_opts);
+			    set_victims_event(marker);
+			    g_marker_victims.push(marker);
         	}
-        	
         	keep_markers_in_map();
         }
     });
@@ -118,3 +118,18 @@ function keep_markers_in_map() {
 	g_map.fitBounds(bounds);
 }
 
+function set_victims_event(marker){
+    google.maps.event.addListener(marker, 'click', function(event){
+        open_menu(marker, event.latLng);
+    });
+}
+function open_menu(marker, position) {
+   var info_window = new google.maps.InfoWindow(
+    {
+        content: '搶奪？<br/>（目前不能按XD)',
+        zIndex: 0,
+        position: position,
+        size: new google.maps.Size(30, 30)
+    });                 
+    info_window.open(g_map, marker);
+}
