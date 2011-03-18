@@ -1,5 +1,5 @@
-import json
 import datetime
+from random import randint
 
 from appengine_django import * # make django works on GAE
 from google.appengine.api import users
@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseServerError
 from django.template import Context
 from django.template import loader
-from random import randint
+from django.utils import simplejson
 
 from nutrobber.models import CurrentPlayers
 from nutrobber.util import decorator
@@ -42,7 +42,7 @@ def checkin(request):
     else:
         CurrentPlayers(player=user, lat=curlat, lng=curlng).put()
 
-    return HttpResponse(json.dumps({'lat':curlat, 'lng':curlng}))
+    return HttpResponse(simplejson.dumps({'lat':curlat, 'lng':curlng}))
 
 
 @decorator.catch_except(HttpResponseServerError())
@@ -55,4 +55,4 @@ def generate_victims(request):
         victim_list += [{'lat_step': randint(-step_limit, step_limit),
                          'lng_step': randint(-step_limit, step_limit)}]
     
-    return HttpResponse(json.dumps(victim_list))
+    return HttpResponse(simplejson.dumps(victim_list))
