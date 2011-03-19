@@ -1,0 +1,9 @@
+body {
+}
+
+.debug {
+    padding: 5px;
+    margin: 3px;
+    font-weight: bold;
+    color: #999999;
+}

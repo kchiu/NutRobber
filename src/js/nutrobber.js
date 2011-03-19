@@ -44,6 +44,11 @@ function show_map(pos) {
 $(function() {
     if (Modernizr.geolocation) {
         navigator.geolocation.getCurrentPosition(show_map);
+        $('a.victim-menu').live('click', function(event){
+            event.preventDefault();
+            $(this).html('目前尚未開放此功能!XD');
+            // TODO: send robbery info to server thru ajax
+        });
     }
     else {
         $('div#map_canvas').html('Your browser does not support geolocation.');
@@ -120,16 +125,20 @@ function keep_markers_in_map() {
 
 function set_victims_event(marker){
     google.maps.event.addListener(marker, 'click', function(event){
-        open_menu(marker, event.latLng);
+        debug(marker.getPosition());
+        open_menu(marker);
     });
 }
-function open_menu(marker, position) {
-   var info_window = new google.maps.InfoWindow(
+function open_menu(marker) {
+    var rob_link_id=marker.getPosition().lat().toString()+'|'+marker.getPosition().lng().toString();
+    var info_window = new google.maps.InfoWindow(
     {
-        content: '搶奪？<br/>（目前不能按XD)',
+        content: '<a id="'+rob_link_id+'" class="victim-menu" href="#">進行搶奪</a>',
         zIndex: 0,
-        position: position,
         size: new google.maps.Size(30, 30)
     });                 
     info_window.open(g_map, marker);
+}
+function debug(message) {
+    $('#debug').html('[DEBUG]: '+message);
 }
