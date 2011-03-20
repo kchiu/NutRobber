@@ -24,14 +24,17 @@ function ajax_refresh_map() {
                         map: g_map,
                         position: p_latlng,
                         title: json.players[i].name,
+                        icon: '/img/nuts.png',
                         zIndex: 10
                     };
                     var p_marker = new google.maps.Marker(p_marker_opts);
+                    set_victims_event(p_marker);
                     g_players.push(p_marker);
                 }
             }
-            // call refrest_map after 1 second
-            g_refreshmap_timeoutid = window.setTimeout(ajax_refresh_map, 1000);
+            // call refrest_map after 10 second
+            window.clearTimeout(g_refreshmap_timeoutid);
+            g_refreshmap_timeoutid = window.setTimeout(ajax_refresh_map, 10000);
         }
     )
 }
@@ -179,7 +182,7 @@ function keep_markers_in_map() {
 
 function set_victims_event(marker){
     google.maps.event.addListener(marker, 'click', function(event){
-        debug(marker.getPosition());
+        debug(marker.getTitle()+' at '+marker.getPosition());
         open_menu(marker);
     });
 }
@@ -187,7 +190,8 @@ function set_victims_event(marker){
 function open_menu(marker) {
     var rob_link_id=marker.getPosition().lat().toString()+'|'+marker.getPosition().lng().toString();
     g_info_window_victim.setPosition(marker.getPosition());
-    g_info_window_victim.setContent('<a id="'+rob_link_id+'" class="victim-menu" href="#">進行搶奪</a>');
+    g_info_window_victim.setContent(
+        '<a id="'+rob_link_id+'" class="victim-menu" href="#">搶奪'+marker.getTitle()+'?</a>');
     g_info_window_victim.open(g_map, marker);
 }
 
