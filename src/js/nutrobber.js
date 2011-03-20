@@ -4,6 +4,12 @@ var g_map;
 var g_marker_player;
 var g_marker_victims = new Array();
 var g_step_width = 0.0001;
+var g_info_window_victim = new google.maps.InfoWindow(
+    {
+        content: '',
+        zIndex: 0,
+        size: new google.maps.Size(30, 30)
+    }); 
 
 function show_map(pos) {
     var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
@@ -131,13 +137,9 @@ function set_victims_event(marker){
 }
 function open_menu(marker) {
     var rob_link_id=marker.getPosition().lat().toString()+'|'+marker.getPosition().lng().toString();
-    var info_window = new google.maps.InfoWindow(
-    {
-        content: '<a id="'+rob_link_id+'" class="victim-menu" href="#">進行搶奪</a>',
-        zIndex: 0,
-        size: new google.maps.Size(30, 30)
-    });                 
-    info_window.open(g_map, marker);
+    g_info_window_victim.setPosition(marker.getPosition());
+    g_info_window_victim.setContent('<a id="'+rob_link_id+'" class="victim-menu" href="#">進行搶奪</a>');
+    g_info_window_victim.open(g_map, marker);
 }
 function debug(message) {
     $('#debug').html('[DEBUG]: '+message);
