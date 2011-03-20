@@ -65,7 +65,7 @@ var g_info_window_victim = new google.maps.InfoWindow(
         content: '',
         zIndex: 0,
         size: new google.maps.Size(30, 30)
-    });
+    }); 
 
 function show_map(pos) {
     var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
