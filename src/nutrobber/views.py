@@ -33,26 +33,50 @@ def checkin(request):
     curlat = float(request.GET['lat'])
     curlng = float(request.GET['lng'])
     
-    record = CurrentPlayers.all().filter('player', user).get()
+    record = CurrentPlayers.all().filter('id', user).get()
     if record:
         record.lat = curlat
         record.lng = curlng
         record.checkin_time = datetime.datetime.now()
         record.put()
     else:
-        CurrentPlayers(player=user, lat=curlat, lng=curlng).put()
+        CurrentPlayers(id=user, lat=curlat, lng=curlng).put()
 
-    return HttpResponse(simplejson.dumps({'lat':curlat, 'lng':curlng}))
+    return HttpResponse(simplejson.dumps({'myid':user.user_id(), 'myname':user.nickname()}))
 
 
 @decorator.catch_except(HttpResponseServerError())
 def generate_victims(request):
-    victim_list = []
     step_limit = float(request.GET['step_limit'])
     count = int(request.GET['count'])
     
-    for i in range(count):
-        victim_list += [{'lat_step': randint(-step_limit, step_limit),
-                         'lng_step': randint(-step_limit, step_limit)}]
+    victim_list = [{'lat_step': randint(-step_limit, step_limit),
+                    'lng_step': randint(-step_limit, step_limit)} for i in range(count)]
     
     return HttpResponse(simplejson.dumps(victim_list))
+
+@decorator.catch_except(HttpResponseServerError())
+def update_position(request):
+    user = users.get_current_user()
+    curlat = float(request.GET['lat'])
+    curlng = float(request.GET['lng'])
+    
+    record = CurrentPlayers.all().filter('id', user).get()
+    if record:
+        record.lat = curlat
+        record.lng = curlng
+        record.checkin_time = datetime.datetime.now()
+        record.put()
+    else:
+        raise 'user {0} is not in database'.format(user)
+
+    return HttpResponse(simplejson.dumps(''))
+
+@decorator.catch_except(HttpResponseServerError())
+def refresh_map(request):
+    players = [{'id':p.id.user_id(), 
+                'name':p.id.nickname(), 
+                'lat':p.lat, 
+                'lng':p.lng} for p in CurrentPlayers.all()]
+
+    return HttpResponse(simplejson.dumps({'players':players}))
