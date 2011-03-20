@@ -5,16 +5,16 @@ var g_mymarker;
 var g_marker_victims = new Array();
 var g_step_width = 0.0001;
 var g_players = new Array();
+var g_refreshmap_timeoutid; 
 
-function ajax_refresh_map(latlng) {
+function ajax_refresh_map() {
     $.getJSON(
         'refresh_map',
-        {lat:latlng.lat(), lng:latlng.lng()},
+        {},
         function (json) {
             // clear all player markers
             for (var i = 0; i < g_players.length; i++) {
-                g_players[i].setMap(null);
-                g_players.pop()
+                g_players.pop().setMap(null);
             }
             // redraw player markers
             for (var i = 0; i < json.players.length; i++) {
@@ -29,7 +29,9 @@ function ajax_refresh_map(latlng) {
                     var p_marker = new google.maps.Marker(p_marker_opts);
                     g_players.push(p_marker);
                 }
-            }            
+            }
+            // call refrest_map after 1 second
+            g_refreshmap_timeoutid = window.setTimeout(ajax_refresh_map, 1000);
         }
     )
 }
@@ -80,7 +82,7 @@ function show_map(pos) {
     g_map = new google.maps.Map(document.getElementById("map_canvas"), map_opts);
         
     ajax_checkin(latlng);
-    ajax_refresh_map(latlng);
+    ajax_refresh_map();
     ajax_generate_victims();
     $(document).keydown(key_handler);
 }
