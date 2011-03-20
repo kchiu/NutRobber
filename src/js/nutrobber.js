@@ -24,9 +24,11 @@ function ajax_refresh_map(latlng) {
                         map: g_map,
                         position: p_latlng,
                         title: json.players[i].name,
+                        icon: '/img/nuts.png',
                         zIndex: 10
                     };
                     var p_marker = new google.maps.Marker(p_marker_opts);
+                    set_victims_event(p_marker);
                     g_players.push(p_marker);
                 }
             }            
